@@ -1,0 +1,1 @@
+# sociology_chp1notes
