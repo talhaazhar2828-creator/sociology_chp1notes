@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sociology">
+<meta name="theme-color" content="#1b1f2a">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>Sociology — Study App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#1b1f2a; --surface:#232938; --surface-2:#2b3244;
+  --ink:#e9e7dd; --ink-dim:#a9ad9e;
+  --accent:#c9a227; --accent-soft:#c9a22733;
+  --line:#3a4152;
+  --radius:10px;
+  --serif:"Newsreader", Georgia, serif;
+  --sans:"IBM Plex Sans", -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f3f1e8; --surface:#ffffff; --surface-2:#ece9dc;
+    --ink:#20221d; --ink-dim:#5e6154;
+    --accent:#8a6a14; --accent-soft:#8a6a1422;
+    --line:#dcd8c6;
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans);
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px 40px;}
+header.top{
+  position:sticky; top:0; z-index:20; background:var(--bg);
+  padding:calc(env(safe-area-inset-top,0px) + 18px) 18px 14px;
+  border-bottom:1px solid var(--line);
+}
+header.top h1{
+  font-family:var(--serif); font-weight:600; font-style:italic;
+  font-size:1.5rem; margin:0 0 2px; letter-spacing:.2px;
+}
+header.top p{margin:0;color:var(--ink-dim);font-size:.85rem;}
+nav.tabs{
+  display:flex; gap:6px; overflow-x:auto; margin-top:14px; padding-bottom:2px;
+  scrollbar-width:none;
+}
+nav.tabs::-webkit-scrollbar{display:none;}
+nav.tabs button{
+  flex:0 0 auto; background:none; border:1px solid var(--line); color:var(--ink-dim);
+  font-family:var(--sans); font-size:.78rem; font-weight:500;
+  padding:7px 13px; border-radius:999px; cursor:pointer; white-space:nowrap;
+  transition:background .15s, color .15s, border-color .15s;
+}
+nav.tabs button.active{background:var(--accent); border-color:var(--accent); color:#1b1f2a;}
+main{padding-top:22px;}
+section.topic{display:none;}
+section.topic.active{display:block; animation:rise .35s ease both;}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.topic h2{
+  font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:0 0 4px;
+}
+.topic .sub{color:var(--accent); font-size:.82rem; margin:0 0 22px; font-weight:500;}
+.card{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+  padding:16px 18px; margin-bottom:12px;
+}
+.card h3{
+  font-family:var(--serif); font-size:1.08rem; font-weight:600; margin:0 0 8px;
+  display:flex; align-items:baseline; gap:8px;
+}
+.card h3 .tag{
+  font-family:var(--sans); font-size:.68rem; color:var(--accent); font-weight:600;
+  border:1px solid var(--accent-soft); padding:2px 7px; border-radius:6px; flex-shrink:0;
+}
+.card p, .card li{font-size:.92rem; line-height:1.55; color:var(--ink); margin:0 0 6px;}
+.card ul{margin:6px 0 0; padding-left:20px;}
+.card p:last-child, .card ul:last-child{margin-bottom:0;}
+.card .def{
+  border-left:3px solid var(--accent); padding:10px 12px; background:var(--accent-soft);
+  border-radius:0 6px 6px 0; margin:8px 0; font-style:italic; font-family:var(--serif);
+  font-size:.98rem;
+}
+details.card{cursor:pointer;}
+details.card summary{
+  font-family:var(--serif); font-weight:600; font-size:1.02rem; list-style:none;
+  display:flex; justify-content:space-between; align-items:center; gap:10px;
+}
+details.card summary::-webkit-details-marker{display:none;}
+details.card summary::after{
+  content:"+"; color:var(--accent); font-size:1.2rem; font-family:var(--sans); flex-shrink:0;
+  transition:transform .2s;
+}
+details.card[open] summary::after{transform:rotate(45deg);}
+details.card .body{padding-top:10px;}
+table{width:100%; border-collapse:collapse; font-size:.86rem; margin-top:4px;}
+th,td{text-align:left; padding:7px 8px; border-bottom:1px solid var(--line);}
+th{color:var(--accent); font-weight:600; font-size:.76rem; text-transform:none;}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+@media (max-width:480px){.grid2{grid-template-columns:1fr;}}
+.progress-row{
+  display:flex; justify-content:space-between; align-items:center;
+  margin:0 0 16px; font-size:.78rem; color:var(--ink-dim);
+}
+.progress-track{flex:1; height:4px; background:var(--line); border-radius:2px; margin:0 12px; overflow:hidden;}
+.progress-fill{height:100%; background:var(--accent); width:20%; transition:width .3s;}
+.navbtns{display:flex; justify-content:space-between; margin-top:26px;}
+.navbtns button{
+  background:var(--surface-2); border:1px solid var(--line); color:var(--ink);
+  font-family:var(--sans); font-size:.85rem; padding:10px 16px; border-radius:8px; cursor:pointer;
+}
+.navbtns button:hover{border-color:var(--accent);}
+footer.note{
+  text-align:center; color:var(--ink-dim); font-size:.74rem; margin-top:30px; line-height:1.5;
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>Sociology, chapter 1</h1>
+  <p>Talha's expanded study notes — intro, subject matter, scope, science, history</p>
+  <nav class="tabs" id="tabs"></nav>
+</header>
+
+<div class="wrap"><main>
+
+<div class="progress-row">
+  <span id="progLabel">Topic 1 of 6</span>
+  <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+  <span>swipe tabs →</span>
+</div>
+
+<!-- TOPIC 1 -->
+<section class="topic" data-idx="0">
+  <h2>Introduction to Sociology</h2>
+  <p class="sub">Definitions · Ibn Khaldun · Auguste Comte · Imraniyat</p>
+
+  <div class="card">
+    <h3>What is Sociology?</h3>
+    <p>From Latin <em>socius</em> (companion/society) + Greek <em>logos</em> (study) — literally "the study of society."</p>
+    <div class="def">Sociology is the scientific study of social life, society, human life and culture, social interaction, social behaviour, and social institutions.</div>
+    <p>Other useful definitions: <strong>Durkheim</strong> — the science of social facts that shape individual behaviour. <strong>Weber</strong> — the interpretive understanding of social action. <strong>Giddens</strong> — the scientific study of human social life, groups and societies.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Auguste Comte <span class="tag">1838</span></h3>
+      <p>French philosopher who <strong>coined the term "Sociology"</strong> and is called the <strong>Father of Sociology</strong>. Believed society could be studied with the same scientific methods as physics — he first wanted to call it "Social Physics." His <strong>Law of Three Stages</strong>: Theological → Metaphysical → Positive (scientific).</p>
+    </div>
+    <div class="card">
+      <h3>Ibn Khaldun <span class="tag">1332–1406</span></h3>
+      <p>Muslim historian whose book <strong>Al-Muqaddimah</strong> studied society scientifically 400 years before Comte. Called it <strong>Imraniyat</strong> (Ilm al-Umran — "science of civilization"). Introduced <strong>Asabiyyah</strong>, social solidarity that drives the rise and fall of civilizations. Seen as sociology's pioneer/forerunner.</p>
+    </div>
+  </div>
+
+  <details class="card">
+    <summary>"Man is a social animal"</summary>
+    <div class="body">
+      <p>Traced to <strong>Aristotle</strong> ("zoon politikon"). Humans can't fully develop in isolation — we need groups, relationships and culture to survive. This idea is the philosophical root of why sociology exists as a science of groups, not individuals.</p>
+    </div>
+  </details>
+</section>
+
+<!-- TOPIC 2 -->
+<section class="topic" data-idx="1">
+  <h2>Subject Matter of Sociology</h2>
+  <p class="sub">10 areas sociology studies or applies</p>
+
+  <details class="card" open><summary>1 · Gender Study</summary><div class="body"><p>How society constructs roles, values, limits and needs differently for men and women, and works on inequality/rights.</p></div></details>
+  <details class="card"><summary>2 · Social Work</summary><div class="body"><p>The helping profession — applies social knowledge to assist individuals, families and communities directly (counselling, case work, welfare support).</p></div></details>
+  <details class="card"><summary>3 · Criminology</summary><div class="body"><p>Studies why crime happens (poverty, unemployment, broken families), types of crime, and prevention/control through police, courts and rehabilitation.</p></div></details>
+  <details class="card"><summary>4 · Community Development</summary><div class="body"><p>A group working together, bottom-up, to solve shared problems — clean water, sanitation, roads — often with NGO/government support.</p></div></details>
+  <details class="card"><summary>5 · Civics & Community Engagement</summary><div class="body"><p>Rights and duties of citizens: voting, paying taxes, obeying laws, and active participation in community/local governance.</p></div></details>
+  <details class="card"><summary>6 · Sociology of Religion</summary><div class="body"><p>How religion shapes society's values and rules — and how society shapes religious practice in turn.</p></div></details>
+  <details class="card"><summary>7 · Sociology of Education</summary><div class="body"><p>Two-way link: how class/family/policy affect access to education, and how education shapes society (mobility, values, skills).</p></div></details>
+  <details class="card"><summary>8 · Socialization</summary><div class="body"><p>Lifelong process of learning a society's norms and values. <strong>Primary</strong> (family, early childhood), <strong>secondary</strong> (school, peers), <strong>re-socialization</strong> (adapting to a new environment, e.g. army/new country).</p></div></details>
+  <details class="card"><summary>9 · Research Methodology</summary><div class="body">
+    <p><strong>Qualitative</strong> — words, opinions, meaning (interviews, case studies). <strong>Quantitative</strong> — numbers, statistics (surveys, measurable data).</p>
+    <p><strong>Steps:</strong> Survey → Interview → Data Collection → Analysis → Results</p>
+  </div></details>
+  <details class="card"><summary>10 · Project Planning & Management</summary><div class="body"><p>Designing, resourcing, implementing and evaluating social development projects — planning, budgeting, monitoring, and measuring outcomes (M&E).</p></div></details>
+</section>
+
+<!-- TOPIC 3 -->
+<section class="topic" data-idx="2">
+  <h2>Scope of Sociology</h2>
+  <p class="sub">Where sociology graduates work</p>
+  <div class="card">
+    <table>
+      <tr><th>Field</th><th>Role</th></tr>
+      <tr><td>Social Welfare Dept.</td><td>Social Welfare Officer (Scale 17)</td></tr>
+      <tr><td>Health Care Centre</td><td>Community/medical social work</td></tr>
+      <tr><td>Old Age Home</td><td>Elderly care & program management</td></tr>
+      <tr><td>Bait-ul-Maal</td><td>Aid assessment & distribution</td></tr>
+      <tr><td>Education</td><td>Lecturer — College (17) / University (18)</td></tr>
+      <tr><td>Planning & Development</td><td>Policy & development research</td></tr>
+      <tr><td>Labour Department</td><td>Workers' rights, disputes, laws</td></tr>
+      <tr><td>Local Government</td><td>Community affairs, local schemes</td></tr>
+      <tr><td>Community Development</td><td>NGO / grassroots project work</td></tr>
+      <tr><td>Social Security</td><td>Pensions & benefit institutions</td></tr>
+      <tr><td>Child Protection Bureau</td><td>Child Protection Officer (Scale 17)</td></tr>
+    </table>
+  </div>
+  <div class="card"><p style="margin:0;color:var(--ink-dim);font-size:.85rem;">Sociology's scope goes far beyond academia — it opens careers across government welfare, healthcare, education, and NGO/development sectors.</p></div>
+</section>
+
+<!-- TOPIC 4 -->
+<section class="topic" data-idx="3">
+  <h2>Sociology as a Science</h2>
+  <p class="sub">Why it counts, and where it's debated</p>
+  <div class="card">
+    <h3>What is science?</h3>
+    <p>Systematic observation + collection of data, split into <strong>Natural Science</strong> (physics, biology) and <strong>Social Science</strong> (sociology, economics, psychology).</p>
+  </div>
+  <div class="card">
+    <h3>The research cycle</h3>
+    <div class="def">Survey → Interview → Data Collection → Analysis → Results</div>
+    <p>This is why sociology qualifies as a science: it doesn't guess — it gathers evidence, analyzes it, and reaches objective conclusions.</p>
+  </div>
+  <div class="grid2">
+    <div class="card"><h3>For</h3><ul><li>Systematic, objective methods</li><li>Finds real patterns (e.g. Durkheim's suicide studies)</li><li>Empirical, evidence-based</li></ul></div>
+    <div class="card"><h3>Against</h3><ul><li>Human behaviour less predictable</li><li>Full objectivity is hard</li><li>Controlled experiments are limited</li></ul></div>
+  </div>
+</section>
+
+<!-- TOPIC 5 -->
+<section class="topic" data-idx="4">
+  <h2>Background History</h2>
+  <p class="sub">Add today's lecture here — this section is still thin</p>
+  <div class="card">
+    <h3>Timeline</h3>
+    <ul>
+      <li><strong>Ibn Khaldun (14th c.)</strong> — Imraniyat, Al-Muqaddimah</li>
+      <li><strong>Auguste Comte (1838)</strong> — coined "Sociology," Positivism</li>
+      <li><strong>Karl Marx</strong> — class conflict, capitalism</li>
+      <li><strong>Herbert Spencer</strong> — society as a living organism</li>
+      <li><strong>Emile Durkheim</strong> — social facts, founded academic sociology</li>
+      <li><strong>Max Weber</strong> — meaning behind social action ("Verstehen")</li>
+    </ul>
+  </div>
+</section>
+
+<!-- BONUS -->
+<section class="topic" data-idx="5">
+  <h2>Bonus: Types & Branches</h2>
+  <p class="sub">For "name any four branches" style questions</p>
+  <div class="card">
+    <h3>Types</h3>
+    <ul>
+      <li><strong>Pure/Theoretical</strong> — builds general theory</li>
+      <li><strong>Applied</strong> — solves real problems</li>
+      <li><strong>Micro</strong> — small-scale interaction</li>
+      <li><strong>Macro</strong> — whole societies, institutions</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Four branches to answer with</h3>
+    <ol style="padding-left:18px;margin:0;font-size:.92rem;line-height:1.7;">
+      <li><strong>Sociology of Education</strong> — education ↔ society</li>
+      <li><strong>Sociology of Religion</strong> — religion ↔ society</li>
+      <li><strong>Criminology</strong> — causes & prevention of crime</li>
+      <li><strong>Gender Studies</strong> — gender roles & inequality</li>
+    </ol>
+  </div>
+</section>
+
+<div class="navbtns">
+  <button id="prevBtn">← Prev</button>
+  <button id="nextBtn">Next →</button>
+</div>
+
+<footer class="note">Expanded from your class notes. Add to Home Screen (Share → Add to Home Screen) to open this like an app.</footer>
+
+</main></div>
+
+<script>
+const topics = [...document.querySelectorAll('.topic')];
+const tabsEl = document.getElementById('tabs');
+const labels = ["Intro","Subject Matter","Scope","Science","History","Bonus"];
+labels.forEach((l,i)=>{
+  const b = document.createElement('button');
+  b.textContent = l; b.dataset.i = i;
+  b.addEventListener('click',()=>go(i));
+  tabsEl.appendChild(b);
+});
+function go(i){
+  topics.forEach((t,idx)=>t.classList.toggle('active', idx===i));
+  [...tabsEl.children].forEach((b,idx)=>b.classList.toggle('active', idx===i));
+  document.getElementById('progLabel').textContent = `Topic ${i+1} of ${topics.length}`;
+  document.getElementById('progFill').style.width = `${((i+1)/topics.length)*100}%`;
+  document.getElementById('prevBtn').disabled = i===0;
+  document.getElementById('nextBtn').disabled = i===topics.length-1;
+  try{ localStorage.setItem('soc_tab', i); }catch(e){}
+  window.scrollTo({top:0, behavior:'instant'});
+}
+document.getElementById('prevBtn').addEventListener('click',()=>{
+  const cur = [...tabsEl.children].findIndex(b=>b.classList.contains('active'));
+  if(cur>0) go(cur-1);
+});
+document.getElementById('nextBtn').addEventListener('click',()=>{
+  const cur = [...tabsEl.children].findIndex(b=>b.classList.contains('active'));
+  if(cur<topics.length-1) go(cur+1);
+});
+let start = 0;
+try{ start = parseInt(localStorage.getItem('soc_tab')||'0',10) || 0; }catch(e){}
+go(Math.min(start, topics.length-1));
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
